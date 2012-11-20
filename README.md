@@ -14,7 +14,7 @@ For Windows, Mingw (g++) is expected to be installed. Edit the batch file, if yo
 
 FEATURES
 --------
-Implements "Critters" and other block cellular automatons with Margouls neighborhood and 2 states.
+Implements "Critters" and other block cellular automatons with Margolus neighborhood and 2 states.
 
 
 INSTALLATION
