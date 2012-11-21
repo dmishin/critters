@@ -27,6 +27,73 @@ class BinaryBlockFunc(ctypes.Structure):
             self.y[i] = v
         assert( self.valid() )
 
+def make_func( values ):
+    f = BinaryBlockFunc()
+    f.set(values)
+    return f
+
+def make_rfinv_func( inv_0, #Inverse or not 0000, 1111 blocks
+                     inv_2, #inverse or not 1100, 0011, 0101, 1010 blocks
+                     inv_2d, #inverse or not diagonal s=2 blocks
+                     inv_13, #inverse or not s=1 and s=3 blocks
+                     rot_1, #rotate180 or not s=1 blocks
+                     rot_3  
+                     ):
+    """ """
+    vals = list(range(16))
+    def inv(x):
+        return x ^ 0xf
+    def rot(x):
+        y = x & 0x1
+        x = x >> 1
+        y = (y << 1) | (x & 0x1)
+        x = x >> 1
+        y = (y << 1) | (x & 0x1)
+        x = x >> 1
+        y = (y << 1) | (x & 0x1)
+        return y
+    def inv_i(i):
+        vals[i] = inv(vals[i])
+    def rot_i(i):
+        vals[i] = rot(vals[i])
+    def bin(s):
+        return int(s,2)
+    if inv_0:
+        inv_i(bin('0000'))
+        inv_i(bin('1111'))
+    if inv_2:
+        inv_i(bin('1100'))
+        inv_i(bin('0011'))
+        inv_i(bin('0101'))
+        inv_i(bin('1010'))
+    if inv_2d:
+        inv_i(bin('1001'))
+        inv_i(bin('0110'))
+    if inv_13:
+        inv_i(bin('1000'))
+        inv_i(bin('0100'))
+        inv_i(bin('0010'))
+        inv_i(bin('0001'))
+        inv_i(bin('0111'))
+        inv_i(bin('1011'))
+        inv_i(bin('1101'))
+        inv_i(bin('1110'))
+    if rot_1:
+        rot_i(bin('1000'))
+        rot_i(bin('0100'))
+        rot_i(bin('0010'))
+        rot_i(bin('0001'))
+    if rot_3:
+        rot_i(bin('0111'))
+        rot_i(bin('1011'))
+        rot_i(bin('1101'))
+        rot_i(bin('1110'))
+    assert( list(sorted(vals)) == list(range(16)))
+    return make_func( vals )
+              
+                         
+
+
 BinaryBlockFuncP = ctypes.POINTER(BinaryBlockFunc)
 
 _eval_even = critters.evaluate_even
