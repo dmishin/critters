@@ -22,21 +22,6 @@ int set_critters_func( BinaryBlockFunction *func )
   return 0;
 }
 
-int is_func_valid(BinaryBlockFunction *func)
-{
-  for( int x = 0; x < 16; ++x){
-    bool found = false;
-    for( int y = 0; y < 16; ++y ){
-      if (func->output[y]==x) {
-	found = true;
-	break;
-      }
-    }
-    if (! found) return 0;
-  }
-  return 1;
-}
-
 inline uint8 nonzero( uint8 x )
 {
   return x ? 1 : 0;

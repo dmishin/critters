@@ -14,7 +14,6 @@ struct BinaryBlockFunction{
   
 
 extern "C" {
-  int CRITTERS_EXPORT is_func_valid(BinaryBlockFunction *func);
   int CRITTERS_EXPORT set_critters_func( BinaryBlockFunction *func );
   int CRITTERS_EXPORT evaluate_even( BinaryBlockFunction *func, uint8 *field, int w, int h );
   int CRITTERS_EXPORT evaluate_odd( BinaryBlockFunction *func, uint8 *field, int w, int h );
