@@ -69,36 +69,27 @@ int evaluate_even( BinaryBlockFunction *func, uint8 *field, int w, int h )
   return 1;
 }
 
+inline int wrap( int x, int h ){
+  if ( x >= h ) return x - h;
+  return x;
+}
+
 int evaluate_odd( BinaryBlockFunction *func, uint8 *field, int w, int h )
 {
   if (w %2 != 0 || h %2 != 0)
     return 0;
 
-  for( int y = 1; y < h-1; y += 2){
-    uint8* row = field + (y*w);
+  int offset;
+  for( int y = 1; y < h+1; y += 2){
+    uint8 *row1 = field + (y           * w);
+    uint8 *row2 = field + (wrap(y+1,h) * w);
 
-    update_block( func,
-		    row[0], row[w-1],
-		    row[w], row[w+w-1] );
-
-    for( int x = 1; x < w-1; x += 2){
-      update_block(func,
-		     row[x],   row[x+1],
-		     row[x+w], row[x+w+1] );
+    for( int x = 1; x < w+1; x += 2, offset += 2){
+      int x2 = wrap(x+1, w);
+      update_block( func,
+		    row1[x], row1[x2],
+		    row2[x], row2[x2] );
     }
   }
-  //top and bottom rows
-  uint8* last_row = field + (w * (h-1) );
-  uint8* first_row = field;
-  for ( int x = 1; x < w - 1; x += 2 ){
-    update_block( func,
-		    last_row [x], last_row [x+1],
-		    first_row[x], first_row[x+1] );
-  }
-  //corner
-  update_block(func,
-	       last_row[w-1], last_row[0],
-	       first_row[w-1], first_row[0]);
-
   return 1;
 }
